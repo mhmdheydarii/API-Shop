@@ -36,9 +36,3 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             "category",
             "created_date",
         ]
-
-
-    def validate_price(self, price):
-        if price <= 0:
-            raise serializers.ValidationError("Price must be greater than 0.")
-        return price
