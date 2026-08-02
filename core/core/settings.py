@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     # Apps
     "shop",
+    "accounts",
 ]
 
 MIDDLEWARE = [
