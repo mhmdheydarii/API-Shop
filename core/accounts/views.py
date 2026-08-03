@@ -13,5 +13,5 @@ class RegistrationView(APIView):
         serializer = RegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({"Detail":"Account created successfully"}, status=status.HTTP_201_CREATED)
+        return Response({"detail": "Account created successfully"}, status=status.HTTP_201_CREATED)
     
