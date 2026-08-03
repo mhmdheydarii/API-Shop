@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
-from .serializers import RegistrationSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import RegistrationSerializer, LoginSerializer
 # Create your views here.
 
 
@@ -14,4 +14,7 @@ class RegistrationView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({"detail": "Account created successfully"}, status=status.HTTP_201_CREATED)
-    
+
+
+class LoginView(TokenObtainPairView):
+    serializer_class = LoginSerializer
