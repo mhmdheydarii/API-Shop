@@ -23,7 +23,7 @@ class ProductsListView(APIView):
             products = products.filter(category__slug=category)
         if order_by := request.query_params.get("order_by"):
             if order_by not in self.allowed_ordering:
-                return Response({"detail": "Invalid ordering field."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"message": "Invalid ordering field."}, status=status.HTTP_400_BAD_REQUEST)
             products = products.order_by(order_by)
 
         serializer = ProductListSerializer(products, many=True)  

@@ -15,11 +15,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs["password"] != attrs["password2"]:
-            raise serializers.ValidationError({"Detail":"Password didn`t match"})
+            raise serializers.ValidationError({"message":"Password didn`t match"})
         try:
             validate_password(attrs.get("password"))
         except exceptions.ValidationError as e:
-            raise serializers.ValidationError({"Detail":[e.messages]})
+            raise serializers.ValidationError({"message":[e.messages]})
         return attrs
 
     def create(self, validated_data):
@@ -37,3 +37,19 @@ class LoginSerializer(TokenObtainPairSerializer):
         validated_data = super().validate(attrs)
         validated_data["email"] = self.user.email
         return validated_data
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+
+    old_password = serializers.CharField()
+    new_password = serializers.CharField()
+    complete_password = serializers.CharField()
+
+    def validate(self, attrs):
+        if attrs["new_password"] != attrs["complete_password"]:
+            raise serializers.ValidationError({"message":"Password didn`t match"})
+        try:
+            validate_password(attrs.get("new_password"))
+        except exceptions.ValidationError as e:
+            raise serializers.ValidationError({"message":[e.messages]})
+        return super().validate(attrs)
