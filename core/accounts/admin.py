@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Profile 
+from .models import User, Profile, OtpTokenModel
 
 # Register your models here.
 
@@ -67,3 +67,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ["id", "user", "first_name", "last_name", "created_date"]
     search_fields = ["first_name"]
 
+
+@admin.register(OtpTokenModel)
+class OtpTokenAdmin(admin.ModelAdmin):
+    list_display = ["id", "otp", "created_date", "expired_date"]

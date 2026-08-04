@@ -53,3 +53,8 @@ class ChangePasswordSerializer(serializers.Serializer):
         except exceptions.ValidationError as e:
             raise serializers.ValidationError({"message":[e.messages]})
         return super().validate(attrs)
+
+
+class ResetPasswordSerializer(serializers.Serializer):
+
+    email = serializers.EmailField()
