@@ -81,6 +81,7 @@ class Profile(models.Model):
 class OtpTokenModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="otp_tokens")
     otp = models.CharField(max_length=8)
+    is_verified = models.BooleanField(default=False)
 
     created_date = models.DateTimeField(auto_now_add=True)
     expired_date = models.DateTimeField()

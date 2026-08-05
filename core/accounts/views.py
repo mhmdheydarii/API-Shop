@@ -16,6 +16,7 @@ from .serializers import (RegistrationSerializer,
                         ChangePasswordSerializer, 
                         PasswordResetSerializer, 
                         PasswordResetVerifySerializer,
+                        PasswordResetCompleteSerializer
                         )
 from .models import User, OtpTokenModel
 # Create your views here.
@@ -106,10 +107,32 @@ class PasswordResetVerifyView(APIView):
         if otp.expired_date <= timezone.now():
             return Response({"message":"Token Expired"}, status=status.HTTP_400_BAD_REQUEST)
 
+        otp.is_verified = True
+        otp.save()
+
         return Response({"message":"Toekn is Valid"}, status=status.HTTP_200_OK)
 
 
-            
+class PasswordResetCompleteView(APIView):
+
+    def post(self, request):
+        serializer = PasswordResetCompleteSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data["email"]
+        user = get_object_or_404(User, email=email)
+        otp = user.otp_tokens.filter(is_verified=True).first()
+
+        if not otp or not otp.is_verified or otp.expired_date <= timezone.now():
+            return Response({"message":"Somthing Went wrong!"},status=status.HTTP_400_BAD_REQUEST)
+        
+        user.set_password(serializer.validated_data["new_password"])
+        user.save()
+
+        otp.delete()
+
+        return Response({"message":"Password Change successfully"}, status=status.HTTP_200_OK)
+
+        
         
 
         
