@@ -6,11 +6,17 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated
 from django.core.mail import send_mail
 from django.conf import settings
+from django.shortcuts import get_object_or_404
 import secrets
 from django.utils import timezone
 from datetime import timedelta
 
-from .serializers import RegistrationSerializer, LoginSerializer, ChangePasswordSerializer, PasswordResetSerializer
+from .serializers import (RegistrationSerializer, 
+                        LoginSerializer, 
+                        ChangePasswordSerializer, 
+                        PasswordResetSerializer, 
+                        PasswordResetVerifySerializer,
+                        )
 from .models import User, OtpTokenModel
 # Create your views here.
 
@@ -54,7 +60,6 @@ class ChangePasswordView(APIView):
 
 class PasswordResetView(APIView):
 
-    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = PasswordResetSerializer(data=request.data)
@@ -84,4 +89,27 @@ class PasswordResetView(APIView):
 
 
 class PasswordResetVerifyView(APIView):
-    pass
+
+    def post(self, request):
+        serializer = PasswordResetVerifySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data["email"]
+        otp_code = serializer.validated_data["otp_code"]
+
+        user = get_object_or_404(User, email=email)
+
+        try:
+            otp = OtpTokenModel.objects.get(user=user, otp=otp_code)
+        except OtpTokenModel.DoesNotExist:
+            return Response({"message":"This Token is invalid"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if otp.expired_date <= timezone.now():
+            return Response({"message":"Token Expired"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message":"Toekn is Valid"}, status=status.HTTP_200_OK)
+
+
+            
+        
+
+        

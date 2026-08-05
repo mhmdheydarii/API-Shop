@@ -58,3 +58,9 @@ class ChangePasswordSerializer(serializers.Serializer):
 class PasswordResetSerializer(serializers.Serializer):
 
     email = serializers.EmailField()
+
+
+class PasswordResetVerifySerializer(serializers.Serializer):
+
+    email = serializers.EmailField()
+    otp_code = serializers.CharField()
