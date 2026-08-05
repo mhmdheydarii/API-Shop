@@ -10,7 +10,7 @@ import secrets
 from django.utils import timezone
 from datetime import timedelta
 
-from .serializers import RegistrationSerializer, LoginSerializer, ChangePasswordSerializer, ResetPasswordSerializer
+from .serializers import RegistrationSerializer, LoginSerializer, ChangePasswordSerializer, PasswordResetSerializer
 from .models import User, OtpTokenModel
 # Create your views here.
 
@@ -52,12 +52,12 @@ class ChangePasswordView(APIView):
 
 
 
-class ResetPasswordView(APIView):
+class PasswordResetView(APIView):
 
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = ResetPasswordSerializer(data=request.data)
+        serializer = PasswordResetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         email = serializer.validated_data["email"]
         user = User.objects.filter(email=email).first()
@@ -80,3 +80,8 @@ class ResetPasswordView(APIView):
         )
 
         return Response({"message":"Code sent to your email"}, status=status.HTTP_200_OK)
+
+
+
+class PasswordResetVerifyView(APIView):
+    pass

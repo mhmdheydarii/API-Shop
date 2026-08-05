@@ -55,6 +55,6 @@ class ChangePasswordSerializer(serializers.Serializer):
         return super().validate(attrs)
 
 
-class ResetPasswordSerializer(serializers.Serializer):
+class PasswordResetSerializer(serializers.Serializer):
 
     email = serializers.EmailField()
