@@ -70,4 +70,4 @@ class ProfileAdmin(admin.ModelAdmin):
 
 @admin.register(OtpTokenModel)
 class OtpTokenAdmin(admin.ModelAdmin):
-    list_display = ["id", "otp", "created_date", "expired_date"]
+    list_display = ["id", "otp", "is_verified" ,"created_date", "expired_date"]
