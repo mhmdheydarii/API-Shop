@@ -47,5 +47,17 @@ class CartSession:
         return False
 
 
+    def remove_product(self, product_id):
+
+        for item in self._cart["items"]:
+            if product_id == item["product_id"]:
+                self._cart["items"].remove(item)
+                self.save()
+                return True
+            
+        return False
+        
+
+    
     def save(self):
         self.session.modified = True
