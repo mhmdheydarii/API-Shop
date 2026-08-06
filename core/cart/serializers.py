@@ -1,8 +1,13 @@
 from rest_framework import serializers
 from .models import CartModel, CartItemModel
+from shop.models import ProductModel
 
-class AddProductSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = CartItemModel
-        fields = ["product", "quantity"] 
+class AddProductSerializer(serializers.Serializer):
+
+    product = serializers.PrimaryKeyRelatedField(queryset=ProductModel.objects.filter(status=True))
+
+
+class UpdateProductSerializer(serializers.Serializer):
+
+    product = serializers.PrimaryKeyRelatedField(queryset=ProductModel.objects.filter(status=True))
