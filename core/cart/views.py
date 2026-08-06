@@ -37,7 +37,7 @@ class UpdateProductView(APIView):
         result = cart.update_product_quantity(product.id)
 
         if not result:
-            return Response({"message":"Product stock not enough"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "Product stock limit reached"}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({"message":"Product quantity updated"}, status=status.HTTP_200_OK)
 
