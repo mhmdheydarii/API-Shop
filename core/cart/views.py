@@ -21,7 +21,7 @@ class AddProductView(APIView):
         result = cart.add_product(product.id, product_stock)
 
         if not result:
-            return Response({"message":"Product is out of stock"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "Cannot add product to cart. Product may be out of stock or unavailable."}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({"message":"Product added successfully"})
 

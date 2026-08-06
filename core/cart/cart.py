@@ -23,21 +23,24 @@ class CartSession:
                     return True
                 else:
                     return False
-        else:
-            new_item = {
-                "product_id":product_id,
-                "quantity":1
-            } 
+        new_item = {
+            "product_id":product_id,
+            "quantity":1
+        } 
+        if product_stock > 0:
             self._cart["items"].append(new_item)
-        self.save()
 
+            self.save()
+            return True
+        
+        return False
 
     def update_product_quantity(self, product_id):
         product = ProductModel.objects.get(id=product_id)
 
         for item in self._cart["items"]:
             if product_id == item["product_id"]:
-                if product.stock > item["quantity"] and item["quantity"] > 0:
+                if product.stock > item["quantity"]:
                     item["quantity"] += 1
                     self.save()
                     return True
