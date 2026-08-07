@@ -57,3 +57,24 @@ class RemoveProductView(APIView):
             return Response({"message":"Product not found"}, status=status.HTTP_404_NOT_FOUND)
             
         return Response({"message":"Product removed successfully"}, status=status.HTTP_200_OK)
+
+
+class ProductListView(APIView):
+
+    def get(self, request):
+        cart = CartSession(request.session)
+        result = cart.get_product_item()
+        payment_amount = cart.get_total_payment_amount()
+        total_quantity = cart.get_total_quantity()
+
+        if not result:
+            return Response({"message":"Cart does`nt have any item"}, status=status.HTTP_200_OK)
+
+        return Response({
+                "message":"Cart items retrieved successfully",
+                "data":result,
+                "payment_amount":payment_amount,
+                "total_quantity":total_quantity
+            }, 
+            status=status.HTTP_200_OK
+            )
