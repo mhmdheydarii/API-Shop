@@ -1,7 +1,11 @@
 from django.contrib import admin
-from .models import OrderModel, OrderItemModel
+from .models import CouponModel ,OrderModel, OrderItemModel
 
 # Register your models here.
+
+@admin.register(CouponModel)
+class CouponAdmin(admin.ModelAdmin):
+    list_display = ["code", "max_limit_usage", "discount_percent", "expired_date"]
 
 @admin.register(OrderModel)
 class OrderAdmin(admin.ModelAdmin):
