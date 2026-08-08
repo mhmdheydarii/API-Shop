@@ -46,7 +46,7 @@ class CartView(APIView):
 
         if not result:
             return Response({"message": "Cannot add product to cart. Product may be out of stock or unavailable."}, status=status.HTTP_400_BAD_REQUEST)
-
+        
         return Response({"message":"Product added successfully"})
     
     # Update product quantity in cart
@@ -75,6 +75,6 @@ class CartView(APIView):
 
         if not result:
             return Response({"message":"Product not found"}, status=status.HTTP_404_NOT_FOUND)
-            
+        
         return Response({"message":"Product removed successfully"}, status=status.HTTP_200_OK)
     

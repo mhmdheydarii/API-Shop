@@ -90,3 +90,16 @@ class CartSession:
 
     def get_total_quantity(self):
         return sum(item["quantity"] for item in self._cart["items"])
+
+
+    def merge_session_cart_in_db(self, user):
+
+        cart, created = CartModel.objects.get_or_create(user=user)
+
+        for item in self._cart["items"]:
+            product = ProductModel.objects.get(id=item["product_id"], status=True)
+            cart_item, created = CartItemModel.objects.get_or_create(cart=cart, product=product)
+            cart_item.quantity += item["quantity"]
+            cart_item.save()
+        session_product_ids = (item["product_id"] for item in self._cart["items"])
+        CartItemModel.objects.filter(cart=cart).exclude(product__id__in=session_product_ids).delete()

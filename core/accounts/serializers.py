@@ -3,7 +3,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import User
-
+from cart.cart import CartSession
 
 class RegistrationSerializer(serializers.ModelSerializer):
 
@@ -36,7 +36,12 @@ class LoginSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         validated_data = super().validate(attrs)
         validated_data["email"] = self.user.email
+
+        cart = CartSession(self.context["request"].session)
+        cart.merge_session_cart_in_db(self.user)
+
         return validated_data
+
 
 
 class ChangePasswordSerializer(serializers.Serializer):
