@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.core.mail import send_mail
 from django.conf import settings
 from django.shortcuts import get_object_or_404
-
+from rest_framework.throttling import ScopedRateThrottle
 from django.utils import timezone
 from datetime import timedelta
 import secrets
@@ -24,6 +24,8 @@ from .models import User, OtpTokenModel
 
 
 class RegistrationView(APIView):
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "registration"
 
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
@@ -33,6 +35,8 @@ class RegistrationView(APIView):
 
 
 class LoginView(TokenObtainPairView):
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "login"
     serializer_class = LoginSerializer
 
 
@@ -62,6 +66,8 @@ class ChangePasswordView(APIView):
 
 class PasswordResetView(APIView):
 
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "resetpassword"
 
     def post(self, request):
         serializer = PasswordResetSerializer(data=request.data)

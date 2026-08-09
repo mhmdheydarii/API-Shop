@@ -55,6 +55,13 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    # Rate limit trhottling
+    "DEFAULT_THROTTLE_CLASSES": ("rest_framework.throttling.ScopedRateThrottle"),
+    "DEFAULT_THROTTLE_RATES": {
+        "registration": "5/min",
+        "login": "2/min",
+        "resetpassword": "3/min",
+    },
 }
 
 MIDDLEWARE = [
