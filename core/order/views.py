@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.throttling import ScopedRateThrottle
 
 from .serializers import CheckOutSerializer
 from cart.models import CartModel
@@ -13,6 +14,8 @@ from decimal import Decimal
 class CheckOutView(APIView):
 
     permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "checkout"
 
     def post(self, request):
         serializer = CheckOutSerializer(data=request.data, context={"request":request})

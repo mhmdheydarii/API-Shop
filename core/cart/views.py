@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
 
 from .serializers import CartProductSerializer
 from .cart import CartSession
@@ -11,6 +12,9 @@ from shop.models import ProductModel
 
 
 class CartItemsView(APIView):
+
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "cart_items"
 
     def get(self, request):
         cart = CartSession(request.session)
@@ -33,6 +37,10 @@ class CartItemsView(APIView):
 
 class CartView(APIView):
 
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "cart_operations"
+
+    
     # Add product in cart
     def post(self, request):
         cart = CartSession(request.session)

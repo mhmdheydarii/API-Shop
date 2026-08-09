@@ -58,9 +58,17 @@ REST_FRAMEWORK = {
     # Rate limit trhottling
     "DEFAULT_THROTTLE_CLASSES": ("rest_framework.throttling.ScopedRateThrottle"),
     "DEFAULT_THROTTLE_RATES": {
+        # Accounts app
         "registration": "5/min",
-        "login": "2/min",
-        "resetpassword": "3/min",
+        "login": "3/min",
+        "changepassword": "3/min",
+        "resetpassword": "2/min",
+        # Cart app
+        "cart_items": "2/min",
+        "cart_operations": "3/min",
+
+        # Order app
+        "checkout": "2/min"
     },
 }
 
