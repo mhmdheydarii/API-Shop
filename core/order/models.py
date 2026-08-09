@@ -2,7 +2,6 @@ from django.db import models
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 from accounts.models import User
-from cart.models import CartModel
 from accounts.validators import validate_iranian_cellphone_number
 from shop.models import ProductModel
 # Create your models here.
@@ -10,7 +9,7 @@ from shop.models import ProductModel
 class CouponModel(models.Model):
 
     code = models.CharField(max_length=255)
-    used_by = models.ManyToManyField(User, related_name="coupon_user", null=True, blank=True)
+    used_by = models.ManyToManyField(User, related_name="coupon_user", blank=True)
     max_limit_usage = models.PositiveIntegerField(default=0)
     discount_percent = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     expired_date = models.DateTimeField(default=timezone.now())
