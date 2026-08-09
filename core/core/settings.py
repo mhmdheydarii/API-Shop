@@ -64,11 +64,11 @@ REST_FRAMEWORK = {
         "changepassword": "3/min",
         "resetpassword": "2/min",
         # Cart app
-        "cart_items": "2/min",
-        "cart_operations": "3/min",
+        "cart_items": "20/min",
+        "cart_operations": "30/min",
 
         # Order app
-        "checkout": "2/min"
+        "checkout": "15/min"
     },
 }
 
