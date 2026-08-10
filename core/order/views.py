@@ -1,19 +1,19 @@
 from django.shortcuts import render
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.throttling import ScopedRateThrottle
-
-from .serializers import CheckOutSerializer
-from cart.models import CartModel
-from .models import OrderItemModel
 from decimal import Decimal
+
+from cart.models import CartModel
+from .serializers import CheckOutSerializer
+from .models import OrderItemModel
+from .permissions import HasCustomerPermissions
 # Create your views here.
 
 class CheckOutView(APIView):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [HasCustomerPermissions]
     throttle_classes = [ScopedRateThrottle]
     throttle_scope = "checkout"
 
