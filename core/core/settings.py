@@ -182,3 +182,7 @@ EMAIL_HOST_PASSWORD = config("EMAIL_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+# Zarinpall merchent id sanbox
+MERCHENT_ID = config("MERCHENT_ID", default="c28381fc-02b2-4efc-b158-bc21d3bdba24")
