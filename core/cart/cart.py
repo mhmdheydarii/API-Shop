@@ -81,9 +81,6 @@ class CartSession:
         return cart_items
 
     
-    def save(self):
-        self.session.modified = True
-
 
     def get_total_payment_amount(self):
         return sum(item["total_price"] for item in self._cart["items"])    
@@ -91,6 +88,13 @@ class CartSession:
     def get_total_quantity(self):
         return sum(item["quantity"] for item in self._cart["items"])
 
+    
+    def save(self):
+            self.session.modified = True
+
+    def clear(self):
+        self._cart = self.session["cart"] = {"items": []}
+        self.save()
 
     def merge_session_cart_in_db(self, user):
 

@@ -4,8 +4,10 @@ from accounts.models import UserType
 
 class HasCustomerPermissions(BasePermission):
 
-    def has_object_permission(self, request, view, obj):
-        user = request.user
-        if user.is_authenticated:     
-            return user.type == UserType.user.value
+    def has_permission(self, request, view):
+        
+        if not request.user.is_authenticated:     
+            return False
+        return request.user.type == UserType.user.value
+        
     

@@ -183,4 +183,4 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 # Zarinpall merchent id sanbox
-MERCHENT_ID = config("MERCHENT_ID", default="c28381fc-02b2-4efc-b158-bc21d3bdba24")
+MERCHANT_ID = "c28381fc-02b2-4efc-b158-bc21d3bdba24"

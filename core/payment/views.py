@@ -16,12 +16,11 @@ from order.permissions import HasCustomerPermissions
 
 class VerifyPaymentview(APIView):
 
-    permission_classes = [HasCustomerPermissions]
 
     def get(self, request):
-        authority_id = request.query_params.get("Authority")
+        authority = request.query_params.get("Authority")
         payment_status = request.query_params.get("Status")
-        payment_obj = get_object_or_404(PaymentModel, authority_id=authority_id)
+        payment_obj = get_object_or_404(PaymentModel, authority_id=authority)
         order = get_object_or_404(OrderModel, payment=payment_obj)
 
         if payment_status != "OK":
@@ -35,11 +34,11 @@ class VerifyPaymentview(APIView):
             return Response({"message":"Payment has already been completed."}, status=status.HTTP_409_CONFLICT)
 
         zarinpal = ZarinPalSandbox()
-        response = zarinpal.payment_verify(int(payment_obj.amount), authority_id)
+        response = zarinpal.payment_verify(int(payment_obj.amount), authority)
 
         data = response.get("data",{})
 
-        if data.get("code") == 100:
+        if data.get("code") in [100,101]:
 
             try:
                 with transaction.atomic():
@@ -80,7 +79,8 @@ class VerifyPaymentview(APIView):
             payment_obj.save()
             order.status = order.OrderStatusTypeModel.CANCELED
             order.save()
-
+            print("RESPONSE", response)
+            print(data.get("code"))
             return Response({"message":"Payment was canceled."})
 
 

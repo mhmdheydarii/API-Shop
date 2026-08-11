@@ -7,7 +7,7 @@ class PaymentModel(models.Model):
     amount = models.DecimalField(default=0, max_digits=10, decimal_places=0)
     ref_id = models.BigIntegerField(default=0, null=True, blank=True)
     response_json = JSONField(default=dict)
-    response_code = models.IntegerField()
+    response_code = models.IntegerField(null=True, blank=True)
 
     class StatusPaymentType(models.TextChoices):
         PENDING = "pending", "در انتظار پرداخت"
