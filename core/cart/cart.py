@@ -96,6 +96,24 @@ class CartSession:
         self._cart = self.session["cart"] = {"items": []}
         self.save()
 
+
+    def sync_session_cart_to_db(self, user):
+        cart, created = CartModel.objects.get_or_create(user=user)
+
+        for item in self._cart["items"]:
+            product = ProductModel.objects.get(
+                id=item["product_id"],
+                status=True
+            )
+
+            cart_item, created = CartItemModel.objects.get_or_create(
+                cart=cart,
+                product=product
+            )
+
+            cart_item.quantity = item["quantity"]
+            cart_item.save()
+
     def merge_session_cart_in_db(self, user):
 
         cart, created = CartModel.objects.get_or_create(user=user)

@@ -55,7 +55,7 @@ class CartView(APIView):
         if not result:
             return Response({"message": "Cannot add product to cart. Product may be out of stock or unavailable."}, status=status.HTTP_400_BAD_REQUEST)
         if request.user.is_authenticated:
-            cart.merge_session_cart_in_db(user=request.user)
+            cart.sync_session_cart_to_db(user=request.user)
         return Response({"message":"Product added successfully"})
     
     # Update product quantity in cart
@@ -70,7 +70,7 @@ class CartView(APIView):
         if not result:
             return Response({"message": "Product stock limit reached"}, status=status.HTTP_400_BAD_REQUEST)
         if request.user.is_authenticated:
-            cart.merge_session_cart_in_db(user=request.user)
+            cart.sync_session_cart_to_db(user=request.user)
         return Response({"message":"Product quantity updated"}, status=status.HTTP_200_OK)
     
     # Delete product from cart
@@ -86,5 +86,5 @@ class CartView(APIView):
         if not result:
             return Response({"message":"Product not found"}, status=status.HTTP_404_NOT_FOUND)
         if request.user.is_authenticated:
-            cart.merge_session_cart_in_db(user=request.user)
+            cart.sync_session_cart_to_db(user=request.user)
         return Response({"message":"Product removed successfully"}, status=status.HTTP_200_OK)
