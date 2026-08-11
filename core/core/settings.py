@@ -57,7 +57,6 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     # Rate limit trhottling
-    "DEFAULT_THROTTLE_CLASSES": ("rest_framework.throttling.ScopedRateThrottle"),
     "DEFAULT_THROTTLE_RATES": {
         # Accounts app
         "registration": "5/min",
@@ -67,9 +66,8 @@ REST_FRAMEWORK = {
         # Cart app
         "cart_items": "20/min",
         "cart_operations": "30/min",
-
         # Order app
-        "checkout": "15/min"
+        "checkout": "15/min",
     },
 }
 

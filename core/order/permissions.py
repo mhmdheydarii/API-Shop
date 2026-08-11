@@ -1,9 +1,11 @@
-from django.contrib.auth.mixins import UserPassesTestMixin
+from rest_framework.permissions import BasePermission
 from accounts.models import UserType
 
 
-class HasCustomerPermissions(UserPassesTestMixin):
+class HasCustomerPermissions(BasePermission):
 
-    def test_func(self):
-        if self.requset.user.is_authenticated:
-            return self.request.user.type == UserType.user.value
+    def has_object_permission(self, request, view, obj):
+        user = request.user
+        if user.is_authenticated:     
+            return user.type == UserType.user.value
+    

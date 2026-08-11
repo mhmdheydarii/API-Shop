@@ -4,6 +4,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from accounts.models import User
 from accounts.validators import validate_iranian_cellphone_number
 from shop.models import ProductModel
+from payment.models import PaymentModel
 # Create your models here.
 
 class CouponModel(models.Model):
@@ -42,6 +43,7 @@ class OrderModel(models.Model):
 
     total_price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
     coupon = models.ForeignKey(CouponModel, on_delete=models.SET_NULL, null=True, blank=True, related_name="order_coupon")
+    payment = models.ForeignKey(PaymentModel, on_delete=models.SET_NULL, null=True, blank=True)
 
     status = models.CharField(max_length=255, choices=OrderStatusTypeModel.choices, default=OrderStatusTypeModel.PENDING)
     created_date = models.DateTimeField(auto_now_add=True)

@@ -11,7 +11,7 @@ class PaymentModel(models.Model):
 
     class StatusPaymentType(models.TextChoices):
         PENDING = "pending", "در انتظار پرداخت"
-        PAIED = "paied", "پرداخت شده"
+        PAID = "paied", "پرداخت شده"
         CANCELED = "canceled", "لغو شده"
 
     status = models.CharField(max_length=20, choices=StatusPaymentType.choices, default=StatusPaymentType.PENDING)
