@@ -21,10 +21,12 @@ class DashboardView(APIView):
                     }
                 )
             
-            if request.user.type in UserType.user.value:
+            if request.user.type == UserType.user.value:
                 return Response(
                     {
                         "message": "User type is Customer",
                         "redirect_url": reverse("dashboard:customer:profile"),
                     }
                 )
+        else:
+            return Response({"message":"User is not authenticated"}, status=status.HTTP_403_FORBIDDEN)
