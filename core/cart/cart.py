@@ -36,7 +36,7 @@ class CartSession:
         return False
 
     def update_product_quantity(self, product_id):
-        product = ProductModel.objects.get(id=product_id)
+        product = ProductModel.objects.get(id=product_id, status=True)
 
         for item in self._cart["items"]:
             if product_id == item["product_id"]:
@@ -64,20 +64,24 @@ class CartSession:
     def get_product_item(self):
         cart_items = self._cart["items"]
         for item in cart_items:
-            product = ProductModel.objects.get(id=item["product_id"])
-            item["product_obj"] = {
-                "id":product.id,
-                "name":product.name,
-                "image":product.image.url,
-                "stock":product.stock,
-                "price":int(product.get_price())
-            }
-            item.update(
-                {
-                    "product_obj":item["product_obj"],
-                    "total_price":item["quantity"] * product.get_price(),
+            try:
+                product = ProductModel.objects.get(id=item["product_id"])
+                item["product_obj"] = {
+                    "id":product.id,
+                    "name":product.name,
+                    "image":product.image.url,
+                    "stock":product.stock,
+                    "price":int(product.get_price())
                 }
-            )
+                item.update(
+                    {
+                        "product_obj":item["product_obj"],
+                        "total_price":item["quantity"] * product.get_price(),
+                    }
+                )
+            except ProductModel.DoesNotExist:
+                self._cart["items"].remove(item)
+                self.save()
         return cart_items
 
     

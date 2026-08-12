@@ -38,7 +38,7 @@ class VerifyPaymentview(APIView):
 
         data = response.get("data",{})
 
-        if data.get("code") in [100,101]:
+        if data.get("code") == 100:
 
             try:
                 with transaction.atomic():
@@ -71,6 +71,9 @@ class VerifyPaymentview(APIView):
             CartSession(request.session).clear()
             return Response({"message":"Payment completed successfully."})
 
+        elif data.get("code") == 101:
+            return Response({"message":"Payment has already been completed."}, status=status.HTTP_200_OK)
+        
         else:
             payment_obj.ref_id = data.get("ref_id")
             payment_obj.response_code = data.get("code")
@@ -79,8 +82,7 @@ class VerifyPaymentview(APIView):
             payment_obj.save()
             order.status = order.OrderStatusTypeModel.CANCELED
             order.save()
-            print("RESPONSE", response)
-            print(data.get("code"))
+
             return Response({"message":"Payment was canceled."})
 
 
