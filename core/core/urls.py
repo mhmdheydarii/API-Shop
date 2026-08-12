@@ -43,6 +43,7 @@ urlpatterns = [
     path('cart/', include('cart.urls')),
     path('order/', include('order.urls')),
     path('payment/', include('payment.urls')),
+    path('dashboard/', include('dashboard.urls')),
     path(
         "swagger/output.json/",
         schema_view.without_ui(cache_timeout=0),

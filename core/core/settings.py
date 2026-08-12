@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "cart",
     "order",
     "payment",
+    "dashboard",
 ]
 
 REST_FRAMEWORK = {
@@ -183,4 +184,4 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 # Zarinpall merchent id sanbox
-MERCHANT_ID = "c28381fc-02b2-4efc-b158-bc21d3bdba24"
+MERCHANT_ID = config("MERCHANT_ID", default="c28381fc-02b2-4efc-b158-bc21d3bdba24")
