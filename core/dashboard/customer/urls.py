@@ -7,4 +7,5 @@ app_name = "customer"
 urlpatterns = [
     path("profile/", views.CustomerProfileView.as_view(), name="profile"),
     path("orders/", views.CustomerOrdersView.as_view(), name="orders"),
+    path("order/<int:pk>/detail/", views.CustomerOrderDetailView.as_view(), name="order-detail"),
 ]

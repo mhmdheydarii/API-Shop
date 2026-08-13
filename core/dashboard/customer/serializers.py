@@ -38,3 +38,24 @@ class OrderSerializer(serializers.ModelSerializer):
             "created_date",
             "order_items",
         ]
+
+
+class OrderDetailSerializer(serializers.ModelSerializer):
+
+    order_items = OrderItemSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = OrderModel
+        fields = [
+            "full_name",
+            "order_items",
+            "phone_number",
+            "state",
+            "city",
+            "address",
+            "zip_code",
+            "total_price",
+            "coupon",
+            "status",
+            "created_date"
+        ]
