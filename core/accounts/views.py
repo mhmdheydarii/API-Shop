@@ -119,7 +119,7 @@ class PasswordResetVerifyView(APIView):
         otp.is_verified = True
         otp.save()
 
-        return Response({"message":"Tkenn is Valid"}, status=status.HTTP_200_OK)
+        return Response({"message":"Token is Valid"}, status=status.HTTP_200_OK)
 
 
 class PasswordResetCompleteView(APIView):
