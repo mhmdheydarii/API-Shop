@@ -4,7 +4,7 @@ from order.models import OrderItemModel, OrderModel
 from shop.models import ProductModel
 
 
-class ProfileSerializer(serializers.ModelSerializer):
+class CustomerProfileSerializer(serializers.ModelSerializer):
 
     email = serializers.EmailField(source="user.email", read_only=True)
 
@@ -28,7 +28,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         fields = ["product", "quantity", "price"]
 
 
-class OrderSerializer(serializers.ModelSerializer):
+class CustomerOrderSerializer(serializers.ModelSerializer):
     
     order_items = OrderItemSerializer(many=True, read_only=True)
 
@@ -43,7 +43,7 @@ class OrderSerializer(serializers.ModelSerializer):
         ]
 
 
-class OrderDetailSerializer(serializers.ModelSerializer):
+class CustomerOrderDetailSerializer(serializers.ModelSerializer):
 
     order_items = OrderItemSerializer(read_only=True, many=True)
 
