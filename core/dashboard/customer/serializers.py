@@ -12,6 +12,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ["first_name", "last_name", "email"]
 
+
+# Serializer for displaying order product details.
 class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -27,6 +29,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    
     order_items = OrderItemSerializer(many=True, read_only=True)
 
     class Meta:
