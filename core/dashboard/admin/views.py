@@ -2,8 +2,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from ..permissions import HasAdminPermission
-from .serializers import AdminProfileSerializer
-
+from .serializers import AdminProfileSerializer, AdminOrderSerializer
+from order.models import OrderModel
+from .paginations import AdminOrdersPagination
 
 class AdminProfileView(APIView):
 
@@ -22,4 +23,25 @@ class AdminProfileView(APIView):
             )
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        return Response(serializer.data)
+
+
+class AdminOrdersView(APIView):
+
+    permission_classes = [HasAdminPermission]
+    allowed_ordering = ["-total_price", "total_price", "-created_date", "created_date"]
+
+    def get(self, request):
+        orders = OrderModel.objects.all()
+
+        if search := request.query_params.get("search"):
+            orders = orders.filter(state__icontains=search)
+        if status_type := request.query_params.get("status"):
+            orders = orders.filter(status=status_type)
+        if order_by := request.query_params.get("order_by"):
+            if order_by not in self.allowed_ordering:
+                return Response({"message":"Invalid ordering field."}, status=status.HTTP_400_BAD_REQUEST)
+            orders = orders.order_by(order_by)
+
+        serializer = AdminOrderSerializer(orders, many=True)
         return Response(serializer.data)
