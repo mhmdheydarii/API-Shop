@@ -2,8 +2,9 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.shortcuts import get_object_or_404
 from ..permissions import HasAdminPermission
-from .serializers import AdminProfileSerializer, AdminOrderSerializer
+from .serializers import AdminProfileSerializer, AdminOrderSerializer, AdminOrderDetailSerializer
 from order.models import OrderModel
 from .paginations import AdminOrdersPagination
 
@@ -47,3 +48,16 @@ class AdminOrdersView(ListAPIView):
             orders = orders.order_by(order_by)
 
         return orders
+
+
+class AdminOrderDetailView(APIView):
+
+    permission_classes = [HasAdminPermission]
+
+    def get(self, request, pk):
+        order = get_object_or_404(
+            OrderModel,
+            id=pk
+        )
+        serializer = AdminOrderDetailSerializer(order)
+        return Response(serializer.data)

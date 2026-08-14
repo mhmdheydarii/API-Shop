@@ -36,3 +36,39 @@ class AdminOrderSerializer(serializers.ModelSerializer):
             "status",
             "created_date"
         ]
+
+
+# Serializer for displaying order product details.
+class ProductSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ProductModel
+        fields = ["name", "image"]
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(read_only=True)
+    class Meta:
+        model = OrderItemModel
+        fields = ["product", "quantity", "price"]
+
+
+class AdminOrderDetailSerializer(serializers.ModelSerializer):
+
+    order_items = OrderItemSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = OrderModel
+        fields = [
+            "full_name",
+            "order_items",
+            "phone_number",
+            "state",
+            "city",
+            "address",
+            "zip_code",
+            "total_price",
+            "coupon",
+            "status",
+            "created_date"
+        ]
