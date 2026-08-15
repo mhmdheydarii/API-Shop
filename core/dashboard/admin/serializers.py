@@ -94,7 +94,7 @@ class CouponUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["email"]
 
-class AdminCouponDetialSerializer(serializers.ModelSerializer):
+class AdminCouponDetailSerializer(serializers.ModelSerializer):
 
     used_by = CouponUserSerializer(many=True ,read_only=True)
 

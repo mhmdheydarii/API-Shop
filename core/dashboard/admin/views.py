@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
@@ -9,10 +9,10 @@ from .serializers import (
     AdminOrderSerializer, 
     AdminOrderDetailSerializer,
     AdminCouponSerializer,
-    AdminCouponDetialSerializer,
+    AdminCouponDetailSerializer,
     )
 from order.models import OrderModel, CouponModel
-from .paginations import AdminOrdersPagination
+from .paginations import AdminDashboardPagination
 
 class AdminProfileView(APIView):
 
@@ -38,7 +38,7 @@ class AdminOrdersView(ListAPIView):
 
     permission_classes = [HasAdminPermission]
     serializer_class = AdminOrderSerializer
-    pagination_class = AdminOrdersPagination
+    pagination_class = AdminDashboardPagination
     allowed_ordering = ["-total_price", "total_price", "-created_date", "created_date"]
 
     def get_queryset(self):
@@ -69,20 +69,14 @@ class AdminOrderDetailView(APIView):
         return Response(serializer.data)
 
 
-class AdminCouponListView(APIView):
+class AdminCouponListView(ListCreateAPIView):
 
     permission_classes = [HasAdminPermission]
+    serializer_class = AdminCouponSerializer
+    pagination_class = AdminDashboardPagination
 
-    def get(self, request):
-        coupon = CouponModel.objects.all()
-        serializer = AdminCouponSerializer(coupon, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = AdminCouponSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({"message":"Coupon created successfully"}, status=status.HTTP_201_CREATED)
+    def get_queryset(self):
+        return CouponModel.objects.all()
 
 
 class AdminCouponDetailView(APIView):
@@ -94,7 +88,7 @@ class AdminCouponDetailView(APIView):
             CouponModel,
             slug=slug
         )
-        serializer = AdminCouponDetialSerializer(coupon)
+        serializer = AdminCouponDetailSerializer(coupon)
         return Response(serializer.data)
 
     def patch(self, request, slug):
@@ -102,7 +96,7 @@ class AdminCouponDetailView(APIView):
             CouponModel,
             slug=slug
         )
-        serializer = AdminCouponDetialSerializer(coupon ,data=request.data, partial=True)
+        serializer = AdminCouponDetailSerializer(coupon ,data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
