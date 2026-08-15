@@ -5,6 +5,12 @@ app_name = "admin"
 
 urlpatterns = [
     path("profile/", views.AdminProfileView.as_view(), name="profile"),
+
+    # Orders
     path("orders/", views.AdminOrdersView.as_view(), name="orders"),
-    path("order/<int:pk>/detail/", views.AdminOrderDetailView.as_view(), name="order-detail")
+    path("order/<int:pk>/detail/", views.AdminOrderDetailView.as_view(), name="order-detail"),
+
+    # Coupon
+    path("coupon/list/", views.AdminCouponListView.as_view(), name="coupon-list"),
+    path("coupon/<slug:slug>/detial/", views.AdminCouponDetailView.as_view(), name="coupon-detial"),
 ]

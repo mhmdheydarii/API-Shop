@@ -4,8 +4,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from ..permissions import HasAdminPermission
-from .serializers import AdminProfileSerializer, AdminOrderSerializer, AdminOrderDetailSerializer
-from order.models import OrderModel
+from .serializers import (
+    AdminProfileSerializer, 
+    AdminOrderSerializer, 
+    AdminOrderDetailSerializer,
+    AdminCouponSerializer,
+    AdminCouponDetialSerializer,
+    )
+from order.models import OrderModel, CouponModel
 from .paginations import AdminOrdersPagination
 
 class AdminProfileView(APIView):
@@ -60,4 +66,43 @@ class AdminOrderDetailView(APIView):
             id=pk
         )
         serializer = AdminOrderDetailSerializer(order)
+        return Response(serializer.data)
+
+
+class AdminCouponListView(APIView):
+
+    permission_classes = [HasAdminPermission]
+
+    def get(self, request):
+        coupon = CouponModel.objects.all()
+        serializer = AdminCouponSerializer(coupon, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = AdminCouponSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"message":"Coupon created successfully"}, status=status.HTTP_201_CREATED)
+
+
+class AdminCouponDetailView(APIView):
+
+    permission_classes = [HasAdminPermission]
+
+    def get(self, request, slug):
+        coupon = get_object_or_404(
+            CouponModel,
+            slug=slug
+        )
+        serializer = AdminCouponDetialSerializer(coupon)
+        return Response(serializer.data)
+
+    def patch(self, request, slug):
+        coupon = get_object_or_404(
+            CouponModel,
+            slug=slug
+        )
+        serializer = AdminCouponDetialSerializer(coupon ,data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.data)

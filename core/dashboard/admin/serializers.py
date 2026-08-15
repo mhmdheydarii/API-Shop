@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from accounts.models import Profile
 from shop.models import ProductModel
-from order.models import OrderModel, OrderItemModel
-
+from order.models import OrderModel, OrderItemModel, CouponModel
+from accounts.models import User
 
 class AdminProfileSerializer(serializers.ModelSerializer):
 
@@ -70,5 +70,42 @@ class AdminOrderDetailSerializer(serializers.ModelSerializer):
             "total_price",
             "coupon",
             "status",
+            "created_date"
+        ]
+
+
+class AdminCouponSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CouponModel
+        fields = [
+            "slug",
+            "code",
+            "max_limit_usage",
+            "discount_percent",
+            "expired_date",
+            "created_date"
+        ]
+
+
+class CouponUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ["email"]
+
+class AdminCouponDetialSerializer(serializers.ModelSerializer):
+
+    used_by = CouponUserSerializer(many=True ,read_only=True)
+
+    class Meta:
+        model = CouponModel
+        fields = [
+            "slug",
+            "code",
+            "used_by",
+            "max_limit_usage",
+            "discount_percent",
+            "expired_date",
             "created_date"
         ]

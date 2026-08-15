@@ -8,7 +8,7 @@ from payment.models import PaymentModel
 # Create your models here.
 
 class CouponModel(models.Model):
-
+    slug = models.SlugField(unique=True)
     code = models.CharField(max_length=255)
     used_by = models.ManyToManyField(User, related_name="coupon_user", blank=True)
     max_limit_usage = models.PositiveIntegerField(default=0)
