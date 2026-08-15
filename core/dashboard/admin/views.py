@@ -10,9 +10,13 @@ from .serializers import (
     AdminOrderDetailSerializer,
     AdminCouponSerializer,
     AdminCouponDetailSerializer,
+    AdminPaymentSerializer,
+    AdminPaymentDetialSerializer
     )
 from order.models import OrderModel, CouponModel
 from .paginations import AdminDashboardPagination
+from payment.models import PaymentModel
+
 
 class AdminProfileView(APIView):
 
@@ -108,4 +112,37 @@ class AdminCouponDetailView(APIView):
         )
         coupon.delete()
         return Response({"message":"Coupon deleted successfully"}, status=status.HTTP_200_OK)
+
+
+
+class AdminPaymentsView(ListAPIView):
+
+    permission_classes = [HasAdminPermission]
+    serializer_class = AdminPaymentSerializer
+    pagination_class = AdminDashboardPagination
+
+    def get_queryset(self):
+        return PaymentModel.objects.all()
+
+
+
+class AdminPaymentDetialView(APIView):
+
+    permission_classes = [HasAdminPermission]
+
+    def get(self, request, pk):
+        payment = get_object_or_404(
+            PaymentModel,
+            id=pk 
+        )
+        serializer = AdminPaymentDetialSerializer(payment)
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        payment = get_object_or_404(
+            PaymentModel,
+            id=pk 
+        )
+        payment.delete()
+        return Response({"message":"Payment deleted successfully"}, status=status.HTTP_200_OK)
     

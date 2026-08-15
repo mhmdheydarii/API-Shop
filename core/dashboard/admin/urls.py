@@ -14,4 +14,8 @@ urlpatterns = [
     # Coupon
     path("coupon/list/", views.AdminCouponListView.as_view(), name="coupon-list"),
     path("coupon/<slug:slug>/detial/", views.AdminCouponDetailView.as_view(), name="coupon-detial"),
+
+    # Payment
+    path("payments/", views.AdminPaymentsView.as_view(), name="payments"),
+    path("payment/<int:pk>/detial/", views.AdminPaymentDetialView.as_view(), name="payment-detial"),
 ]

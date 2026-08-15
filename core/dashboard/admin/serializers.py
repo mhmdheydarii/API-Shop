@@ -3,6 +3,7 @@ from accounts.models import Profile
 from shop.models import ProductModel
 from order.models import OrderModel, OrderItemModel, CouponModel
 from accounts.models import User
+from payment.models import PaymentModel
 
 class AdminProfileSerializer(serializers.ModelSerializer):
 
@@ -60,6 +61,7 @@ class AdminOrderDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderModel
         fields = [
+            "id",
             "full_name",
             "order_items",
             "phone_number",
@@ -70,7 +72,8 @@ class AdminOrderDetailSerializer(serializers.ModelSerializer):
             "total_price",
             "coupon",
             "status",
-            "created_date"
+            "created_date",
+            "updated_date"
         ]
 
 
@@ -79,6 +82,7 @@ class AdminCouponSerializer(serializers.ModelSerializer):
     class Meta:
         model = CouponModel
         fields = [
+            "id",
             "slug",
             "code",
             "max_limit_usage",
@@ -94,6 +98,7 @@ class CouponUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["email"]
 
+
 class AdminCouponDetailSerializer(serializers.ModelSerializer):
 
     used_by = CouponUserSerializer(many=True ,read_only=True)
@@ -101,11 +106,42 @@ class AdminCouponDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = CouponModel
         fields = [
+            "id",
             "slug",
             "code",
             "used_by",
             "max_limit_usage",
             "discount_percent",
             "expired_date",
+            "created_date",
+            "updated_date"
+        ]
+
+
+class AdminPaymentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PaymentModel
+        fields = [
+            "id",
+            "authority_id",
+            "amount",
+            "status", 
             "created_date"
+        ]
+
+
+class AdminPaymentDetialSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PaymentModel
+        fields = [
+            "authority_id",
+            "amount",
+            "ref_id",
+            "response_json",
+            "response_code",
+            "status", 
+            "created_date",
+            "updated_date"
         ]
