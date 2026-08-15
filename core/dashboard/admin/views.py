@@ -106,3 +106,12 @@ class AdminCouponDetailView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
+    def delete(self, request, slug):
+        coupon = get_object_or_404(
+            CouponModel,
+            slug=slug
+        )
+        coupon.delete()
+        return Response({"message":"Coupon deleted successfully"}, status=status.HTTP_200_OK)
+    
