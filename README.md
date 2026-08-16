@@ -3,6 +3,7 @@
 
 ```
 Features :
+```
 1. User Authentication / Authorization
 2. JWT Authentication
 3. Role-Based Permissions
@@ -12,7 +13,7 @@ Features :
 7. Order management
 8. Payment Integration
 9. Admin & Customer Dashboard
-```
+
 
 ```
 Technologies :
