@@ -38,9 +38,9 @@ class CustomerOrdersView(APIView):
         orders = OrderModel.objects.filter(
             user=request.user, status=OrderModel.OrderStatusTypeModel.PAID
         ).prefetch_related("order_items")
+
         serializer = CustomerProfileSerializer(orders, many=True)
         return Response(serializer.data)
-
 
 class CustomerOrderDetailView(APIView):
 
@@ -51,6 +51,7 @@ class CustomerOrderDetailView(APIView):
             OrderModel,
             id=pk,
             user=request.user,
+            status=OrderModel.OrderStatusTypeModel.PAID
         )
         serializer = CustomerOrderDetailSerializer(order)
         return Response(serializer.data)

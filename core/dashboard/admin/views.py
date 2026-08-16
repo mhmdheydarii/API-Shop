@@ -3,7 +3,12 @@ from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
+
+from order.models import OrderModel, CouponModel
+from payment.models import PaymentModel
+from shop.models import ProductModel
 from ..permissions import HasAdminPermission
+from .paginations import AdminDashboardPagination
 from .serializers import (
     AdminProfileSerializer, 
     AdminOrderSerializer, 
@@ -11,12 +16,11 @@ from .serializers import (
     AdminCouponSerializer,
     AdminCouponDetailSerializer,
     AdminPaymentSerializer,
-    AdminPaymentDetialSerializer
+    AdminPaymentDetialSerializer,
+    AdminProductsSerializer,
+    AdminProductCreateSerializer,
+    AdminProductDetailSerializer,
     )
-from order.models import OrderModel, CouponModel
-from .paginations import AdminDashboardPagination
-from payment.models import PaymentModel
-
 
 class AdminProfileView(APIView):
 
@@ -126,7 +130,7 @@ class AdminPaymentsView(ListAPIView):
 
 
 
-class AdminPaymentDetialView(APIView):
+class AdminPaymentDetailView(APIView):
 
     permission_classes = [HasAdminPermission]
 
@@ -146,3 +150,59 @@ class AdminPaymentDetialView(APIView):
         payment.delete()
         return Response({"message":"Payment deleted successfully"}, status=status.HTTP_200_OK)
     
+
+
+class AdminProductsView(ListAPIView):
+
+    permission_classes = [HasAdminPermission]
+    serializer_class = AdminProductsSerializer
+    pagination_class = AdminDashboardPagination
+
+    def get_queryset(self):
+        return ProductModel.objects.all()
+
+
+class AdminProductCreateView(APIView):
+
+    permission_classes = [HasAdminPermission]
+
+    def post(self, request):
+        serializer = AdminProductCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+
+class AdminProductDetialView(APIView):
+
+    permission_classes = [HasAdminPermission]
+
+    def get(self, request, slug):
+        product = get_object_or_404(
+            ProductModel,
+            slug=slug,
+        )
+        serializer = AdminProductDetailSerializer(product)
+        return Response(serializer.data)
+
+    def patch(self, request, slug):
+        product = get_object_or_404(
+            ProductModel,
+            slug=slug
+        )
+        serializer = AdminProductDetailSerializer(
+            product,
+            data=request.data,
+            partial=True
+            )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def delete(self, request, slug):
+        product = get_object_or_404(
+            ProductModel,
+            slug=slug
+        )
+        product.delete()
+        return Response({"message":"Product deleted successfully"}, status=status.HTTP_200_OK)

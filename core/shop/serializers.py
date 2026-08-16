@@ -4,6 +4,8 @@ from .models import ProductModel
 
 class ProductListSerializer(serializers.ModelSerializer):
 
+    category = serializers.CharField(source="category.name", read_only=True)
+
     class Meta:
         model = ProductModel
         fields = [
@@ -21,6 +23,8 @@ class ProductListSerializer(serializers.ModelSerializer):
 
 class ProductDetailSerializer(serializers.ModelSerializer):
 
+    category = serializers.CharField(source="category.name", read_only=True)
+    
     class Meta:
         model = ProductModel
         fields = [

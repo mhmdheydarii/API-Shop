@@ -4,6 +4,7 @@ from shop.models import ProductModel
 from order.models import OrderModel, OrderItemModel, CouponModel
 from accounts.models import User
 from payment.models import PaymentModel
+from shop.models import ProductModel
 
 class AdminProfileSerializer(serializers.ModelSerializer):
 
@@ -144,4 +145,63 @@ class AdminPaymentDetialSerializer(serializers.ModelSerializer):
             "status", 
             "created_date",
             "updated_date"
+        ]
+
+
+
+class AdminProductsSerializer(serializers.ModelSerializer):
+
+    category = serializers.CharField(source="category.name", read_only=True)
+
+    class Meta:
+        model = ProductModel
+        fields = [
+            "id",
+            "name",
+            "price",
+            "discount_percent",
+            "stock",
+            "category",
+            "status",
+            "created_date"
+        ]
+
+
+class AdminProductCreateSerializer(serializers.ModelSerializer):
+
+    category = serializers.CharField(source="category.name")
+
+    class Meta:
+        model = ProductModel
+        fields = [
+            "name",
+            "slug",
+            "brief_description",
+            "description",
+            "image",
+            "price",
+            "discount_percent",
+            "stock",
+            "category",
+            "status",
+        ]
+
+class AdminProductDetailSerializer(serializers.ModelSerializer):
+
+    category = serializers.CharField(source="category.name")
+    
+    class Meta:
+        model = ProductModel
+        fields = [
+            "name",
+            "slug",
+            "brief_description",
+            "description",
+            "image",
+            "price",
+            "discount_percent",
+            "stock",
+            "category",
+            "status",
+            "get_price"
         ]
