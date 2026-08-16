@@ -1,9 +1,9 @@
 <h1>Django API Store</h1>
 <p>A Django Rest Api stoer</p>
+------------------------------------------------------
 
-```
-Features :
-```
+<h3>Features :</h3>
+
 1. User Authentication / Authorization
 2. JWT Authentication
 3. Role-Based Permissions
