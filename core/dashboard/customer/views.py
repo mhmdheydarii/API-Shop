@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 
 from .serializers import CustomerProfileSerializer, CustomerOrderSerializer, CustomerOrderDetailSerializer
 from ..permissions import HasCustomerPermission
+from ..paginations import Pagination
 from order.models import OrderModel, OrderItemModel
 
 
@@ -30,17 +32,15 @@ class CustomerProfileView(APIView):
         )
 
 
-class CustomerOrdersView(APIView):
+class CustomerOrdersView(ListAPIView):
 
     permission_classes = [HasCustomerPermission]
+    serializer_class = CustomerOrderSerializer
+    pagination_class = Pagination
 
-    def get(self, request):
-        orders = OrderModel.objects.filter(
-            user=request.user, status=OrderModel.OrderStatusTypeModel.PAID
-        ).prefetch_related("order_items")
-
-        serializer = CustomerProfileSerializer(orders, many=True)
-        return Response(serializer.data)
+    def get_queryset(self):
+        return OrderModel.objects.filter(status=OrderModel.OrderStatusTypeModel.PAID)
+    
 
 class CustomerOrderDetailView(APIView):
 

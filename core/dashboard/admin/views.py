@@ -8,7 +8,7 @@ from order.models import OrderModel, CouponModel
 from payment.models import PaymentModel
 from shop.models import ProductModel
 from ..permissions import HasAdminPermission
-from .paginations import AdminDashboardPagination
+from ..paginations import Pagination
 from .serializers import (
     AdminProfileSerializer, 
     AdminOrderSerializer, 
@@ -46,7 +46,7 @@ class AdminOrdersView(ListAPIView):
 
     permission_classes = [HasAdminPermission]
     serializer_class = AdminOrderSerializer
-    pagination_class = AdminDashboardPagination
+    pagination_class = Pagination
     allowed_ordering = ["-total_price", "total_price", "-created_date", "created_date"]
 
     def get_queryset(self):
@@ -81,7 +81,7 @@ class AdminCouponListView(ListCreateAPIView):
 
     permission_classes = [HasAdminPermission]
     serializer_class = AdminCouponSerializer
-    pagination_class = AdminDashboardPagination
+    pagination_class = Pagination
 
     def get_queryset(self):
         return CouponModel.objects.all()
@@ -123,7 +123,7 @@ class AdminPaymentsView(ListAPIView):
 
     permission_classes = [HasAdminPermission]
     serializer_class = AdminPaymentSerializer
-    pagination_class = AdminDashboardPagination
+    pagination_class = Pagination
 
     def get_queryset(self):
         return PaymentModel.objects.all()
@@ -156,7 +156,7 @@ class AdminProductsView(ListAPIView):
 
     permission_classes = [HasAdminPermission]
     serializer_class = AdminProductsSerializer
-    pagination_class = AdminDashboardPagination
+    pagination_class = Pagination
 
     def get_queryset(self):
         return ProductModel.objects.all()

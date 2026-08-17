@@ -40,12 +40,14 @@ class CustomerOrderSerializer(serializers.ModelSerializer):
             "total_price",
             "created_date",
             "order_items",
+            "calculate_total_price",
         ]
 
 
 class CustomerOrderDetailSerializer(serializers.ModelSerializer):
 
     order_items = OrderItemSerializer(read_only=True, many=True)
+    coupon = serializers.CharField(source="coupon.code", read_only=True)
 
     class Meta:
         model = OrderModel
@@ -59,6 +61,7 @@ class CustomerOrderDetailSerializer(serializers.ModelSerializer):
             "zip_code",
             "total_price",
             "coupon",
+            "calculate_total_price",
             "status",
             "created_date"
         ]
