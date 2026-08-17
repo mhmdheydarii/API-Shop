@@ -1,33 +1,36 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 
 from .serializers import ProductListSerializer, ProductDetailSerializer
 from .models import ProductModel
+from .paginations import ProductsPagination
 
 # Create your views here.
 
-class ProductsListView(APIView):
+class ProductsListView(ListAPIView):
 
+    serializer_class = ProductListSerializer
+    pagination_class = ProductsPagination
     allowed_ordering = ["-price", "price", "-created_date", "created_date"]
 
-    def get(self, request):
+    def get_queryset(self):
 
         products = ProductModel.objects.filter(status=True)
 
-        if search := request.query_params.get("search"):
+        if search := self.request.query_params.get("search"):
             products = products.filter(name__icontains=search)
-        if category := request.query_params.get("category"):
+        if category := self.request.query_params.get("category"):
             products = products.filter(category__slug=category)
-        if order_by := request.query_params.get("order_by"):
+        if order_by := self.request.query_params.get("order_by"):
             if order_by not in self.allowed_ordering:
-                return Response({"message": "Invalid ordering field."}, status=status.HTTP_400_BAD_REQUEST)
+                return ProductModel.objects.none()
             products = products.order_by(order_by)
 
-        serializer = ProductListSerializer(products, many=True)  
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return products
 
     
 
