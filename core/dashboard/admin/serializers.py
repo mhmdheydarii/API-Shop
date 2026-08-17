@@ -1,10 +1,11 @@
 from rest_framework import serializers
+from django.utils.text import slugify
 from accounts.models import Profile
 from shop.models import ProductModel
 from order.models import OrderModel, OrderItemModel, CouponModel
 from accounts.models import User
 from payment.models import PaymentModel
-from shop.models import ProductModel
+from shop.models import ProductModel, CategoryModel
 
 class AdminProfileSerializer(serializers.ModelSerializer):
 
@@ -169,7 +170,7 @@ class AdminProductsSerializer(serializers.ModelSerializer):
 
 class AdminProductCreateSerializer(serializers.ModelSerializer):
 
-    category = serializers.CharField(source="category.name")
+    category = serializers.CharField()
 
     class Meta:
         model = ProductModel
@@ -185,6 +186,21 @@ class AdminProductCreateSerializer(serializers.ModelSerializer):
             "category",
             "status",
         ]
+
+    def create(self, validated_data):
+        category_name = validated_data.pop("category")
+
+        category, created = CategoryModel.objects.get_or_create(
+            name=category_name,
+            defaults={
+                "slug":slugify(category_name, allow_unicode=True)
+            }
+        )
+
+        return ProductModel.objects.create(
+            category=category,
+            **validated_data
+        )
 
 class AdminProductDetailSerializer(serializers.ModelSerializer):
 
@@ -205,3 +221,6 @@ class AdminProductDetailSerializer(serializers.ModelSerializer):
             "status",
             "get_price"
         ]
+
+
+    
