@@ -64,6 +64,7 @@ REST_FRAMEWORK = {
         "login": "3/min",
         "changepassword": "3/min",
         "resetpassword": "2/min",
+        "resetpassword_verify": "2/min",
         # Cart app
         "cart_items": "20/min",
         "cart_operations": "30/min",

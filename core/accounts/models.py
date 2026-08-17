@@ -65,7 +65,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user_profile")
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
-    image = models.ImageField(upload_to="Profile/users", default="Profile/default/images.jpg", null=True, blank=True)
+    image = models.ImageField(upload_to="profile/users", default="Profile/default/images.jpg", null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 

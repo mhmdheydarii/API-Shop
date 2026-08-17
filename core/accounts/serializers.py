@@ -48,10 +48,10 @@ class ChangePasswordSerializer(serializers.Serializer):
 
     old_password = serializers.CharField()
     new_password = serializers.CharField()
-    complete_password = serializers.CharField()
+    confirm_password = serializers.CharField()
 
     def validate(self, attrs):
-        if attrs["new_password"] != attrs["complete_password"]:
+        if attrs["new_password"] != attrs["confirm_password"]:
             raise serializers.ValidationError({"message":"Password didn`t match"})
         try:
             validate_password(attrs.get("new_password"))
@@ -67,13 +67,11 @@ class PasswordResetSerializer(serializers.Serializer):
 
 class PasswordResetVerifySerializer(serializers.Serializer):
 
-    email = serializers.EmailField()
     otp_code = serializers.CharField()
 
 
 class PasswordResetCompleteSerializer(serializers.Serializer):
 
-    email = serializers.EmailField()
     new_password = serializers.CharField()
     new_password2 = serializers.CharField()
 

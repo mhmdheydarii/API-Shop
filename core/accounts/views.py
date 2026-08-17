@@ -78,10 +78,13 @@ class PasswordResetView(APIView):
         user = User.objects.filter(email=email).first()
 
         if not user:
-            return Response({"message":"This email not excist"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message":"If this email exists, an OTP has been sent."}, status=status.HTTP_200_OK)
 
+        request.session["password_reset_user_id"] = user.id
         otp_password = ''.join(secrets.choice("0123456789") for i in range(8))
         created_date = timezone.now()
+        
+        OtpTokenModel.objects.filter(user=user, is_verified=False).delete()
 
         otp_token = OtpTokenModel.objects.create(otp=otp_password, 
                                                 user=user,
@@ -100,17 +103,27 @@ class PasswordResetView(APIView):
 
 class PasswordResetVerifyView(APIView):
 
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "resetpassword_verify"
+
     def post(self, request):
         serializer = PasswordResetVerifySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        email = serializer.validated_data["email"]
         otp_code = serializer.validated_data["otp_code"]
 
-        user = get_object_or_404(User, email=email)
+        user_id = request.session.get("password_reset_user_id")
 
-        try:
-            otp = OtpTokenModel.objects.get(user=user, otp=otp_code)
-        except OtpTokenModel.DoesNotExist:
+        if not user_id:
+            return Response({"message":"Token is expired"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = get_object_or_404(User, id=user_id)
+
+        otp = OtpTokenModel.objects.filter(
+            user=user, 
+            otp=otp_code,
+            is_verified=False
+            ).first()
+        if not otp:
             return Response({"message":"This Token is invalid"}, status=status.HTTP_400_BAD_REQUEST)
 
         if otp.expired_date <= timezone.now():
@@ -118,6 +131,7 @@ class PasswordResetVerifyView(APIView):
 
         otp.is_verified = True
         otp.save()
+        request.session["password_reset_verified"] = True
 
         return Response({"message":"Token is Valid"}, status=status.HTTP_200_OK)
 
@@ -127,8 +141,14 @@ class PasswordResetCompleteView(APIView):
     def post(self, request):
         serializer = PasswordResetCompleteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        email = serializer.validated_data["email"]
-        user = get_object_or_404(User, email=email)
+        user_id = request.session.get("password_reset_user_id")
+        verified = request.session.get("password_reset_verified")
+
+        if not user_id or not verified:
+            return Response({"message":"Password reset session is invalid or expired"},
+                status=status.HTTP_400_BAD_REQUEST)
+
+        user = get_object_or_404(User, id=user_id)
         otp = user.otp_tokens.filter(is_verified=True).first()
 
         if not otp or not otp.is_verified or otp.expired_date <= timezone.now():
@@ -138,6 +158,9 @@ class PasswordResetCompleteView(APIView):
         user.save()
 
         otp.delete()
+
+        request.session.pop("password_reset_user_id", None)
+        request.session.pop("password_reset_verified", None)
 
         return Response({"message":"Password Change successfully"}, status=status.HTTP_200_OK)
 
