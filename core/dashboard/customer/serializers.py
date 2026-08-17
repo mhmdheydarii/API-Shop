@@ -40,7 +40,6 @@ class CustomerOrderSerializer(serializers.ModelSerializer):
             "total_price",
             "created_date",
             "order_items",
-            "calculate_total_price",
         ]
 
 
@@ -61,7 +60,6 @@ class CustomerOrderDetailSerializer(serializers.ModelSerializer):
             "zip_code",
             "total_price",
             "coupon",
-            "calculate_total_price",
             "status",
             "created_date"
         ]

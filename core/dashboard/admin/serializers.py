@@ -27,6 +27,7 @@ class AdminProfileSerializer(serializers.ModelSerializer):
 class AdminOrderSerializer(serializers.ModelSerializer):
     
     user = serializers.CharField(source="user.email", read_only=True)
+    coupon = serializers.CharField(source="coupon.code", read_only=True)
 
     class Meta:
         model = OrderModel
