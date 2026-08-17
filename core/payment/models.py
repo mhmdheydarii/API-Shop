@@ -3,7 +3,7 @@ from django.db.models import JSONField
 # Create your models here.
 
 class PaymentModel(models.Model):
-    authority_id = models.CharField(max_length=255)
+    authority_id = models.CharField(max_length=255, unique=True)
     amount = models.DecimalField(default=0, max_digits=10, decimal_places=0)
     ref_id = models.BigIntegerField(default=0, null=True, blank=True)
     response_json = JSONField(default=dict)
@@ -11,7 +11,7 @@ class PaymentModel(models.Model):
 
     class StatusPaymentType(models.TextChoices):
         PENDING = "pending", "در انتظار پرداخت"
-        PAID = "paied", "پرداخت شده"
+        PAID = "paid", "پرداخت شده"
         CANCELED = "canceled", "لغو شده"
 
     status = models.CharField(max_length=20, choices=StatusPaymentType.choices, default=StatusPaymentType.PENDING)

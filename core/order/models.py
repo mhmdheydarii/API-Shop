@@ -13,7 +13,7 @@ class CouponModel(models.Model):
     used_by = models.ManyToManyField(User, related_name="coupon_user", blank=True)
     max_limit_usage = models.PositiveIntegerField(default=0)
     discount_percent = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    expired_date = models.DateTimeField(default=timezone.now())
+    expired_date = models.DateTimeField(default=timezone.now)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
