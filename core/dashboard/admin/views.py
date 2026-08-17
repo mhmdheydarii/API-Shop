@@ -2,11 +2,12 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.shortcuts import get_object_or_404
 
 from order.models import OrderModel, CouponModel
 from payment.models import PaymentModel
-from shop.models import ProductModel
+from shop.models import ProductModel, CategoryModel
 from ..permissions import HasAdminPermission
 from ..paginations import Pagination
 from .serializers import (
@@ -20,6 +21,8 @@ from .serializers import (
     AdminProductsSerializer,
     AdminProductCreateSerializer,
     AdminProductDetailSerializer,
+    AdminCategoriesSerializer,
+    AdminCategoryDetailSerializer,
     )
 
 class AdminProfileView(APIView):
@@ -206,3 +209,46 @@ class AdminProductDetialView(APIView):
         )
         product.delete()
         return Response({"message":"Product deleted successfully"}, status=status.HTTP_200_OK)
+
+
+
+class AdminCategoriesView(ListAPIView):
+
+    permission_classes = [HasAdminPermission]
+    serializer_class = AdminCategoriesSerializer
+    pagination_class = Pagination
+
+    def get_queryset(self):
+        return CategoryModel.objects.all()
+
+
+class AdminCategoryDetailView(APIView):
+
+    permission_classes = [HasAdminPermission]
+
+    def get(self, request, slug):
+        category = get_object_or_404(
+            CategoryModel,
+            slug=slug
+        )
+        serializer = AdminCategoryDetailSerializer(category)
+        return Response(serializer.data)
+
+    def patch(self, request, slug):
+        category = get_object_or_404(
+            CategoryModel,
+            slug=slug
+        )
+        serializer = AdminCategoryDetailSerializer(category, partial=True, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def delete(self, request, slug):
+        category = get_object_or_404(
+            CategoryModel,
+            slug=slug
+        )
+        category.delete()
+        return Response({"message":"Category deleted successfully"}, status=status.HTTP_200_OK)
+    

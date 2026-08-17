@@ -23,4 +23,8 @@ urlpatterns = [
     path("products/", views.AdminProductsView.as_view(), name="products"),
     path("product/create/", views.AdminProductCreateView.as_view(), name="product-create"),
     re_path(r'product/(?P<slug>[-\w]*)/detail/', views.AdminProductDetialView.as_view(), name="product-detail"),
+
+    # Categories
+    path("categories/", views.AdminCategoriesView.as_view(), name="categories"),
+    re_path(r'category/(?P<slug>[-\w]*)/detail/', views.AdminCategoryDetailView.as_view(), name="category-detail"),
 ]

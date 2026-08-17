@@ -224,4 +224,24 @@ class AdminProductDetailSerializer(serializers.ModelSerializer):
         ]
 
 
-    
+
+class AdminCategoriesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CategoryModel
+        fields = [
+            "name",
+            "slug",
+        ]
+
+
+class AdminCategoryDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CategoryModel
+        fields = [
+            "slug",
+            "name",
+            "created_date",
+            "updated_date"
+        ]
