@@ -6,7 +6,6 @@ from rest_framework.throttling import ScopedRateThrottle
 
 from .serializers import CartProductSerializer
 from .cart import CartSession
-from shop.models import ProductModel
 
 # Create your views here.
 
