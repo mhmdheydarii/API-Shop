@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "drf_yasg",
     # Apps
+    "website",
     "shop",
     "accounts",
     "cart",
