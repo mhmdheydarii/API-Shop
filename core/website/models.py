@@ -1,6 +1,5 @@
 from django.db import models
 from accounts.validators import validate_iranian_cellphone_number
-
 # Create your models here.
 
 

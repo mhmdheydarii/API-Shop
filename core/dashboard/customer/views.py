@@ -5,10 +5,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 
-from .serializers import CustomerProfileSerializer, CustomerOrderSerializer, CustomerOrderDetailSerializer
+from .serializers import (
+    CustomerProfileSerializer, 
+    CustomerOrderSerializer, 
+    CustomerOrderDetailSerializer, 
+    )
 from ..permissions import HasCustomerPermission
 from ..paginations import Pagination
-from order.models import OrderModel, OrderItemModel
+from order.models import OrderModel
 
 
 class CustomerProfileView(APIView):
