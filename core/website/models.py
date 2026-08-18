@@ -29,7 +29,7 @@ class ContactModel(models.Model):
 
 
 class NewsLetterModel(models.Model):
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)

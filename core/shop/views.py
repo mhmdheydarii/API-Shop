@@ -44,3 +44,19 @@ class ProductDetailView(APIView):
         serializer = ProductDetailSerializer(produtc)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+
+
+class RecentProductsView(APIView):
+
+    def get(self, request):
+        products = ProductModel.objects.filter(status=True)[:4]
+        serializer = ProductListSerializer(products, many=True)
+        return Response(serializer.data)
+
+
+class DiscountedProductsView(APIView):
+
+    def get(self, request):
+        products = ProductModel.objects.filter(status=True, discount_percent__gte=50)[:5]
+        serializer = ProductListSerializer(products, many=True)
+        return Response(serializer.data)
