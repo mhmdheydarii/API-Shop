@@ -12,7 +12,7 @@ class ContactView(APIView):
         serializer = ContactSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({"message":"Your ticket sinded successfully"}, status=status.HTTP_200_OK)
+        return Response({"message":"Your ticket has been sent successfully"}, status=status.HTTP_200_OK)
 
 
 class NewsLetterView(APIView):
