@@ -4,7 +4,7 @@ from .models import TicketModel, NewsLetterModel
 
 @admin.register(TicketModel)
 class TicketModelAdmin(admin.ModelAdmin):
-    list_display = ["first_name", "last_name", "created_date"]
+    list_display = ["first_name", "last_name", "status", "created_date"]
 
 
 @admin.register(NewsLetterModel)

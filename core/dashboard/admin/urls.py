@@ -29,4 +29,6 @@ urlpatterns = [
     re_path(r'category/(?P<slug>[-\w]*)/detail/', views.AdminCategoryDetailView.as_view(), name="category-detail"),
 
     # Tickets
+    path("tickets/", views.TicketsView.as_view(), name="tickets"),
+    path("ticket/<int:pk>/detail/", views.TicketDetailView.as_view(), name="ticket-detail"),
 ]

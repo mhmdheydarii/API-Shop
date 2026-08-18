@@ -6,6 +6,7 @@ from order.models import OrderModel, OrderItemModel, CouponModel
 from accounts.models import User
 from payment.models import PaymentModel
 from shop.models import ProductModel, CategoryModel
+from website.models import TicketModel, NewsLetterModel
 
 class AdminProfileSerializer(serializers.ModelSerializer):
 
@@ -244,4 +245,33 @@ class AdminCategoryDetailSerializer(serializers.ModelSerializer):
             "name",
             "created_date",
             "updated_date"
+        ]
+
+
+class AdminTicketsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TicketModel
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "status",
+            "created_date",
+            "updated_date"
+        ]
+
+
+class AdminTicketDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TicketModel
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "phone_number",
+            "message",
+            "status",
+            "created_date"
         ]

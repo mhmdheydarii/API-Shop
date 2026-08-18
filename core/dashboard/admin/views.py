@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from order.models import OrderModel, CouponModel
 from payment.models import PaymentModel
 from shop.models import ProductModel, CategoryModel
+from website.models import TicketModel
 from ..permissions import HasAdminPermission
 from ..paginations import Pagination
 from .serializers import (
@@ -23,6 +24,8 @@ from .serializers import (
     AdminProductDetailSerializer,
     AdminCategoriesSerializer,
     AdminCategoryDetailSerializer,
+    AdminTicketsSerializer,
+    AdminTicketDetailSerializer,
     )
 
 class AdminProfileView(APIView):
@@ -253,3 +256,34 @@ class AdminCategoryDetailView(APIView):
         return Response({"message":"Category deleted successfully"}, status=status.HTTP_200_OK)
 
 
+class TicketsView(ListAPIView):
+
+    permission_classes = [HasAdminPermission]
+    serializer_class = AdminTicketsSerializer
+    pagination_class = Pagination
+
+    def get_queryset(self):
+        return TicketModel.objects.all()
+
+
+class TicketDetailView(APIView):
+
+    permission_classes = [HasAdminPermission]
+
+    def get(self, request, pk):
+        ticket = get_object_or_404(
+            TicketModel,
+            id=pk
+        )
+        serializer = AdminTicketDetailSerializer(ticket)
+        return Response(serializer.data)
+
+    def patch(self, request, pk):
+        ticket = get_object_or_404(
+            TicketModel,
+            id=pk
+        )
+        serializer = AdminTicketDetailSerializer(ticket, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
