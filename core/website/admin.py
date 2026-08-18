@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import ContactModel, NewsLetterModel
+from .models import TicketModel, NewsLetterModel
 # Register your models here.
 
-@admin.register(ContactModel)
-class ContactAdmin(admin.ModelAdmin):
+@admin.register(TicketModel)
+class TicketModelAdmin(admin.ModelAdmin):
     list_display = ["first_name", "last_name", "created_date"]
 
 

@@ -4,19 +4,19 @@ from accounts.validators import validate_iranian_cellphone_number
 # Create your models here.
 
 
-class ContactModel(models.Model):
+class TicketModel(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=12, validators=[validate_iranian_cellphone_number])
     message = models.TextField()
 
-    class ContactStatusTypeModel(models.TextChoices):
+    class TicketStatusTypeModel(models.TextChoices):
             PENDING = "pending", "در انتظار بررسی"
             IN_PROGRESS = "in_progress", "درحال بررسی"
             RESOLVED = "resolved", "حل شده"
             CANCLED = "cancled", "کنسل شده"
 
-    status = models.CharField(choices=ContactStatusTypeModel.choices, default=ContactStatusTypeModel.PENDING, max_length=20)
+    status = models.CharField(choices=TicketStatusTypeModel.choices, default=TicketStatusTypeModel.PENDING, max_length=20)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 

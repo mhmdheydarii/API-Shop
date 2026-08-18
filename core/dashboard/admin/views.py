@@ -251,4 +251,5 @@ class AdminCategoryDetailView(APIView):
         )
         category.delete()
         return Response({"message":"Category deleted successfully"}, status=status.HTTP_200_OK)
-    
+
+

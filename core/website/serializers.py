@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from .models import ContactModel, NewsLetterModel
+from .models import TicketModel, NewsLetterModel
 
-class ContactSerializer(serializers.ModelSerializer):
+class TicketSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = ContactModel
+        model = TicketModel
         fields = [
             "first_name",
             "last_name",

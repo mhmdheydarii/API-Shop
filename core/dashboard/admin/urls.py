@@ -27,4 +27,6 @@ urlpatterns = [
     # Categories
     path("categories/", views.AdminCategoriesView.as_view(), name="categories"),
     re_path(r'category/(?P<slug>[-\w]*)/detail/', views.AdminCategoryDetailView.as_view(), name="category-detail"),
+
+    # Tickets
 ]
