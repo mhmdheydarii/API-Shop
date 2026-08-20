@@ -3,7 +3,9 @@
 <p align="center">
 A RESTful e-commerce API built with Django and Django REST Framework.
 </p>
-
+<p align="center">
+  <img src="./doc/DB-schema.png" width="700"/>
+  </p>
 <hr>
 
 <h2>Features</h2>
