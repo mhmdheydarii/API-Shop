@@ -32,7 +32,7 @@ A RESTful e-commerce API built with Django and Django REST Framework.
 
 <h2>Database Schema</h2>
 
-<img src="./doc/DB-schema.png" width="700"/>
+<img src="./doc/DB-schema.png" width="500"/>
 
 <h2>Project Structure</h2>
 
