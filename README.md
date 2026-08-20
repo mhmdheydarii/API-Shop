@@ -84,7 +84,6 @@ SECRET_KEY=secret_key
 DEBUG=True
 ALLOWED_HOSTS="*"
 
-SMTP
 EMAIL_USER=your email address
 EMAIL_PASSWORD=your email password
 ```
