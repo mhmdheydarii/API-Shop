@@ -84,6 +84,12 @@ SECRET_KEY=secret_key
 DEBUG=True
 ALLOWED_HOSTS="*"
 
+POSTGRES_DB=db
+POSTGRES_USER=user
+POSTGRES_PASSWORD=password
+POSTGRES_HOST=host
+POSTGRES_PORT=5432
+
 EMAIL_USER=your email address
 EMAIL_PASSWORD=your email password
 ```
