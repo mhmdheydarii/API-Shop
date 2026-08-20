@@ -30,10 +30,6 @@ A RESTful e-commerce API built with Django and Django REST Framework.
   <li>Rate Limiting</li>
 </ul>
 
-<h2>Database Schema</h2>
-
-<img src="./doc/DB-schema.png" width="700"/>
-
 <h2>Project Structure</h2>
 
 <pre>
@@ -50,3 +46,64 @@ api-shop/
 ├── requirements.txt
 └── README.md
 </pre>
+
+
+<h2>Database Schema</h2>
+
+<img src="./doc/DB-schema.png" width="700"/>
+
+
+<h2>⚙️ Installation (Windows)</h2>
+
+<p>Follow these steps to set up and run the project locally.</p>
+
+<hr>
+
+<h3>1. Clone the repository</h3>
+
+```bash
+git clone https://github.com/mhmdheydarii/API-Shop.git
+```
+
+<br>
+
+<h3>2. Navigate to the project directory</h3>
+
+```bash
+cd API-Shop
+```
+
+<br>
+
+<h3>3. Configure environment variables</h3>
+
+<p>Create a .env file in the project root and add the required environment variables.</p>
+
+```bash
+SECRET_KEY=secret_key
+DEBUG=True
+ALLOWED_HOSTS="*"
+
+SMTP
+EMAIL_USER=your email address
+EMAIL_PASSWORD=your email password
+```
+</br>
+
+<h3>4. Run the project</h3>
+
+```bash
+docker compose up --build
+```
+<br>
+<h3>5. Migrations </h3>
+
+```bash
+docker compose exec backend python manage.py migrate
+```
+
+</details>
+
+<br>
+
+<p align="center">
