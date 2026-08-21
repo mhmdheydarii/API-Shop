@@ -2,11 +2,15 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.throttling import ScopedRateThrottle
 from .serializers import TicketSerializer, NewsLetterSerializer
 # Create your views here.
 
 
 class TicketView(APIView):
+
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "ticket"
 
     def post(self, request):
         serializer = TicketSerializer(data=request.data)
@@ -16,6 +20,9 @@ class TicketView(APIView):
 
 
 class NewsLetterView(APIView):
+
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "news_letter"
 
     def post(self, request):
         serializer = NewsLetterSerializer(data=request.data)

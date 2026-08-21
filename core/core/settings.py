@@ -71,6 +71,9 @@ REST_FRAMEWORK = {
         "cart_operations": "30/min",
         # Order app
         "checkout": "15/min",
+        # Website app
+        "ticket": "2/min",
+        "news_letter": "2/min"
     },
 }
 
