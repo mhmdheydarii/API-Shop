@@ -19,7 +19,6 @@ import socket
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-
 # Debug toolbar config
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 INTERNAL_IPS = [ip[:-1] + "1" for ip in ips]
@@ -80,7 +79,7 @@ REST_FRAMEWORK = {
         "checkout": "15/min",
         # Website app
         "ticket": "2/min",
-        "news_letter": "2/min"
+        "news_letter": "2/min",
     },
 }
 
@@ -163,8 +162,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "static/"
-STATIC_ROOT = "staticsfiles/"
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
