@@ -19,7 +19,7 @@ class ProductsListView(ListAPIView):
 
     def get_queryset(self):
 
-        products = ProductModel.objects.filter(status=True)
+        products = ProductModel.objects.filter(status=True).select_related("category")
 
         if search := self.request.query_params.get("search"):
             products = products.filter(name__icontains=search)
