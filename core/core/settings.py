@@ -200,3 +200,14 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Zarinpall merchant id sanbox
 MERCHANT_ID = config("MERCHANT_ID", default="c28381fc-02b2-4efc-b158-bc21d3bdba24")
+
+# Redis configs
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
