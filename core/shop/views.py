@@ -3,8 +3,12 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.filters import OrderingFilter, SearchFilter
 from django.shortcuts import get_object_or_404
-
+from django.views.decorators.cache import cache_control
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+import time
 from .serializers import ProductListSerializer, ProductDetailSerializer
 from .models import ProductModel
 from .paginations import ProductsPagination
@@ -15,22 +19,24 @@ class ProductsListView(ListAPIView):
 
     serializer_class = ProductListSerializer
     pagination_class = ProductsPagination
-    allowed_ordering = ["-price", "price", "-created_date", "created_date"]
+    filter_backends = [OrderingFilter, SearchFilter]
+
+    ordering_fields = ["price", "created_date"]
+    ordering = ["-created_date"]
+    search_fields = ["name"]
 
     def get_queryset(self):
-
         products = ProductModel.objects.filter(status=True).select_related("category")
-
-        if search := self.request.query_params.get("search"):
-            products = products.filter(name__icontains=search)
         if category := self.request.query_params.get("category"):
             products = products.filter(category__slug=category)
-        if order_by := self.request.query_params.get("order_by"):
-            if order_by not in self.allowed_ordering:
-                return ProductModel.objects.none()
-            products = products.order_by(order_by)
-
         return products
+
+    @method_decorator(cache_page(60*15, key_prefix="product_list"))
+    @method_decorator(cache_control(private=False, no_cache=True))
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    
 
     
 
