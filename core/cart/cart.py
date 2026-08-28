@@ -1,5 +1,6 @@
 from .models import CartItemModel, CartModel
 from shop.models import ProductModel
+from django.core.cache import cache
 
 class CartSession:
 
@@ -94,7 +95,8 @@ class CartSession:
 
     
     def save(self):
-            self.session.modified = True
+            cache.delete(f"cart_items:{self.session.session_key}")
+            self.session.modified = True 
 
     def clear(self):
         self._cart = self.session["cart"] = {"items": []}
