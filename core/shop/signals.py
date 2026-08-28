@@ -4,5 +4,8 @@ from django.core.cache import cache
 from .models import ProductModel
 
 @receiver([post_save, post_delete], sender=ProductModel)
-def product_list_cache(sender, **kwargs):
-    cache.delete_pattern("*product_list*")
+def invalidate_product_cache(sender, instance, **kwargs):
+    cache.delete_pattern("product_list:*")
+    cache.delete(f"product_detail:{instance.slug}")
+    cache.delete("recent_products")
+    cache.delete("discounted_products")
