@@ -26,8 +26,9 @@ A RESTful e-commerce API built with Django and Django REST Framework.
   <li>Django REST Framework</li>
   <li>PostgreSQL</li>
   <li>Docker</li>
-  <li>Swagger</li>
+  <li>Redis</li>
   <li>Rate Limiting</li>
+  <li>Swagger</li>
 </ul>
 
 <h2>Project Structure</h2>
