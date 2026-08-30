@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.core.cache import cache
-from accounts.models import Profile
+from accounts.models import Profile, User
 from order.models import OrderModel, CouponModel
 from payment.models import PaymentModel
 from shop.models import ProductModel, CategoryModel
@@ -51,3 +51,14 @@ def invalidate_admin_tickets_cache(sender, instance, **kwargs):
 
 
 
+
+# Customer dashboard cache
+@receiver([post_save, post_delete], sender=Profile)
+def invalidate_customer_profile_cache(sender, instance, **kwargs):
+    cache.delete(f"customer_profile:{instance.id}")
+
+
+@receiver([post_save, post_delete], sender=OrderModel)
+def invalidate_customer_orders_cache(sender, instance, **kwargs):
+    cache.delete_pattern(f"customer_orders:{instance.user.id}_*")
+    cache.delete(f"customer_order:{instance.user.id}_{instance.id}")
