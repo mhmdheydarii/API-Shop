@@ -161,6 +161,7 @@ class AdminProductsSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
+            "slug",
             "price",
             "discount_percent",
             "stock",
